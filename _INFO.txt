@@ -1,0 +1,1 @@
+I decided to implement some already offered by pygame functionalities from scratch, such as collision, as a way for me to optimize them fully and be able to set the code logic and structure to my liking.
