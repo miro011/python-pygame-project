@@ -9,11 +9,10 @@ class Background():
         self.screen = screen
 
         self.image = pygame.image.load("./media/images/stars.png")
-        self.x = 0
-        self.y = 0
+        self.rect = self.image.get_rect()
 
     ######################################################################
     # OPTIONAL
 
     def blit(self):
-        self.screen.blit(self.image, (self.x, self.y))
+        self.screen.blit(self.image, self.rect)

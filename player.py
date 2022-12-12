@@ -12,25 +12,14 @@ class Player():
         self.spritesDict = spritesDict
         
         self.image = pygame.image.load("./media/images/spaceship.png")
-        
-        self.x = (globals.DISPLAY_WIDTH / 2) - (self.get_width() / 2)
-        self.y = globals.DISPLAY_HEIGHT - (self.get_height() + 30) # 30 being the distance from the bottom
+        self.rect = self.image.get_rect()
+        self.rect.center = (globals.DISPLAY_WIDTH/2, globals.DISPLAY_HEIGHT-40)
         
         self.speedX = 3
-        self.speedY = 0
+        self.speedY = 3
 
         self.curSpeedX = 0
         self.curSpeedY = 0
-
-
-    ######################################################################
-    # GETTERS
-
-    def get_width(self):
-        return self.image.get_width()
-
-    def get_height(self):
-        return self.image.get_height()
 
 
     ######################################################################
@@ -57,23 +46,16 @@ class Player():
 
 
     def update_location(self):
-        oldX = self.x
-        oldY = self.y
-
-        self.x += self.curSpeedX
-        self.y += self.curSpeedY
-
-        if globals.collision(self, self.spritesDict["walls"]):
-            self.x = oldX
-            self.y = oldY
-
+        newRect = self.rect.move(self.curSpeedX, self.curSpeedY)
+        if newRect.collidelist(self.spritesDict["walls"]) == -1:
+            self.rect = newRect
     
     def blit(self):
-        self.screen.blit(self.image, (self.x, self.y))
+        self.screen.blit(self.image, self.rect)
 
 
     ######################################################################
     # SPECIAL
 
     def shoot(self):
-        self.spritesDict["bullets"].append(bullet.Bullet(self.screen, self.spritesDict, self.x, self.y))
+        self.spritesDict["bullets"].append(bullet.Bullet(self.screen, self.spritesDict, self.rect.center[0], self.rect.top))

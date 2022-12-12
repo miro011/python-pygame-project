@@ -9,22 +9,14 @@ class Menu():
     def __init__(self, screen, spritesDict, status):
         self.screen = screen
         self.spritesDict = spritesDict
-        self.status = status # -1 = off, 1 = on
+        self.status = status # -1 is off, 1 is on
 
         # Menu image
         self.image = pygame.image.load("./media/images/menu-background.png")
-        self.x = 0
-        self.y = 0
+        self.rect = self.image.get_rect()
 
         # Menu text
-        '''
-        font = pygame.font.Font('freesansbold.ttf', 32)
-        text = "1.Resume\n2.Quit"
-        self.text = font.render('1.Resume\n2.Quit', True, globals.GREEN_COLOR, globals.BLUE_COLOR)
-        self.textRect = self.text.get_rect() # create a rectangular object for the text
-        self.textRect.center = (globals.DISPLAY_WIDTH / 2, globals.DISPLAY_HEIGHT / 2) # set the center of the rectangular object
-        '''
-        self.textLineElemsArr = self.generate_multiline_text_elems("1.Resume\n2.Quit")
+        self.textLineObjsArr = self.generate_multiline_text_elems("1.Resume\n2.Quit")
 
     ######################################################################
     # OPTIONAL
@@ -33,18 +25,17 @@ class Menu():
         for event in eventsQueueArr:
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_ESCAPE: self.toggle_menu()
-                elif event.key == pygame.K_1: self.toggle_menu()
-                elif event.key == pygame.K_2: pygame.quit()
+                elif self.status == 1 and event.key == pygame.K_1: self.toggle_menu()
+                elif self.status == 1 and event.key == pygame.K_2: pygame.quit()
 
     def blit(self):
-        self.screen.blit(self.image, (self.x, self.y))
-        #self.screen.blit(self.text, self.textRect) # have to blit the text after the image for it be on top
-        for textElem in self.textLineElemsArr: self.screen.blit(textElem[0], textElem[1])
+        self.screen.blit(self.image, self.rect)
+        for textLineObj in self.textLineObjsArr: self.screen.blit(textLineObj["text"], textLineObj["rect"])
 
     ######################################################################
     # SPECIAL
 
-    # return an array of text lines: [[textElem1, textRect1], [textElem2, textRect2]...]
+    # return an array of text lines: [{text:textElem, rect:rectElem}...]
     def generate_multiline_text_elems(self, textStr):
         output = []
 
@@ -64,18 +55,17 @@ class Menu():
             textElem = font.render(textLinesArr[i], True, globals.GREEN_COLOR, globals.BLUE_COLOR)
             textRect = textElem.get_rect()
             textRect.center = (globals.DISPLAY_WIDTH / 2, curElemYCenter) # set the center of the rectangular object
-            output.append([textElem, textRect])
+            output.append({"text":textElem, "rect":textRect})
             curElemYCenter += lineHeight
 
         return output
 
     def toggle_menu(self):
-        self.status = self.status * -1
+        self.status *= -1
 
-        for key in self.spritesDict.keys():
+        keysArr = list(self.spritesDict.keys()) # for some odd reason python keeps updating it when I change keys, and I need this to be static
+        for key in keysArr:
             if key == "menu": continue
-            newKey = ""
-            if self.status == 1: newKey = f"{key}.paused"
-            elif key.endswith(".paused"): newKey = key[:-7]
+            newKey = f"{key}.paused" if self.status == 1 else key[:-7]
             self.spritesDict[newKey] = self.spritesDict[key]
             del self.spritesDict[key]

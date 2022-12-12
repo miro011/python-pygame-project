@@ -12,45 +12,37 @@ class Enemy():
         self.spritesDict = spritesDict
         
         self.image = pygame.image.load("./media/images/ufo.png")
-        
-        self.x = random.randint(0, globals.DISPLAY_WIDTH - self.get_width())
-        self.y = random.randint(0, globals.DISPLAY_HEIGHT - 300) # 300 being the distance from the bottom
+        self.rect = self.image.get_rect()
+        # +/- 1 is so that they don't collide with a wall on spawn
+        x = random.randint(0 + (self.image.get_width() / 2) + 1, globals.DISPLAY_WIDTH - (self.image.get_width() / 2) - 1)
+        y = random.randint(0 + (self.image.get_height() / 2) + 1, globals.DISPLAY_HEIGHT - (self.image.get_height() / 2) - 1)
+        self.rect.center = (x,y)
 
-        self.curSpeedX = 2
-        self.curSpeedY = 0
+
+        self.speedX = 2
+        self.speedY = 0
 
         self.shouldDelete = False
-
-    ######################################################################
-    # GETTERS
-
-    def get_width(self):
-        return self.image.get_width()
-
-    def get_height(self):
-        return self.image.get_height()
 
     ######################################################################
     # OPTIONAL
 
     def update_location(self):
-        oldX = self.x
-        oldY = self.y
+        newRect = self.rect.move(self.speedX, self.speedY)
 
-        self.x += self.curSpeedX
-        self.y += self.curSpeedY
-
-        wallsHitArr = globals.collision(self, self.spritesDict["walls"])
-        if wallsHitArr:
-            self.x = oldX
-            self.y = oldY
-            for wallSprite in wallsHitArr:
-                if wallSprite.description.startswith("vertical"):
-                    self.curSpeedX *= -1
-                    self.y += 40
-                elif wallSprite.description == "horizontal bottom":
+        wallIndexesHitArr = newRect.collidelistall(self.spritesDict["walls"])
+        if wallIndexesHitArr:
+            for wallIndex in wallIndexesHitArr:
+                wallDescription = self.spritesDict["walls"][wallIndex].description
+                if wallDescription in ["top", "bottom"]:
                     self.shouldDelete = True
+                    return
+                elif wallDescription in ["left", "right"]:
+                    self.speedX *= -1
+                    self.rect = self.rect.move(0, 30)
+        else:
+            self.rect = newRect
             
     def blit(self):
-        self.screen.blit(self.image, (self.x, self.y))
+        self.screen.blit(self.image, self.rect)
         

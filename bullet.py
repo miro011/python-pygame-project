@@ -1,5 +1,4 @@
 import pygame
-import globals
 import enemy
 
 class Bullet():
@@ -13,57 +12,30 @@ class Bullet():
         self.spritesDict = spritesDict
         
         self.image = pygame.image.load("./media/images/bullet.png")
-        
-        self.x = x
-        self.y = y
+        self.rect = self.image.get_rect()
+        self.rect.center = (x,y)
 
-        self.curSpeedX = 0
-        self.curSpeedY = -10
+        self.speedX = 0
+        self.speedY = -10
 
         self.shouldDelete = False
 
 
     ######################################################################
-    # GETTERS
-
-    def get_width(self):
-        return self.image.get_width()
-
-    def get_height(self):
-        return self.image.get_height()
-
-    ######################################################################
     # OPTIONAL
 
     def update_location(self):
-        oldX = self.x
-        oldY = self.y
-
-        self.x += self.curSpeedX
-        self.y += self.curSpeedY
-
-
-        wallsHitArr = globals.collision(self, self.spritesDict["walls"])
-        if wallsHitArr:
-            self.x = oldX
-            self.y = oldY
-            for wallSprite in wallsHitArr:
-                if wallSprite.description == "horizontal top":
-                    self.shouldDelete = True
-
-        # bullet collides with enemy
-        enemySpritesHitArr = globals.collision(self, self.spritesDict["enemies"])
-        if enemySpritesHitArr:
-            # mark the bullet itself for deletion
+        newRect = self.rect.move(self.speedX, self.speedY)
+        if newRect.collidelist(self.spritesDict["walls"]) == -1:
+            self.rect = newRect
+        else:
             self.shouldDelete = True
+            return
 
-            # mark the hit enemies for deletion
-            for enemySprite in enemySpritesHitArr:
-                enemySprite.shouldDelete = True
-            
-            # create new enemies
-            for i in range(len(enemySpritesHitArr)):
-                self.spritesDict["enemies"].append(enemy.Enemy(self.screen, self.spritesDict))
+        enemyIndexesHitArr = self.rect.collidelistall(self.spritesDict["enemies"])
+        for enemyIndex in enemyIndexesHitArr:
+            self.spritesDict["enemies"][enemyIndex].shouldDelete = True
+            self.spritesDict["enemies"].append(enemy.Enemy(self.screen, self.spritesDict))
 
     def blit(self):
-        self.screen.blit(self.image, (self.x, self.y))
+        self.screen.blit(self.image, self.rect)

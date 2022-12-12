@@ -1,12 +1,12 @@
 import pygame
 import psutil
 
-import globals
 import menu
 import wall
 import background
 import player
 import enemy
+import pointer
 
 class Sprites():
 
@@ -26,10 +26,10 @@ class Sprites():
         self.dict["menu"].append(menu.Menu(self.screen, self.dict, -1))
 
         self.dict["walls"] = []
-        self.dict["walls"].append(wall.Wall(0, 0, 0, globals.DISPLAY_HEIGHT, "vertical left"))
-        self.dict["walls"].append(wall.Wall(0, 0, globals.DISPLAY_WIDTH, 0, "horizontal top"))
-        self.dict["walls"].append(wall.Wall(globals.DISPLAY_WIDTH, 0, 0, globals.DISPLAY_HEIGHT, "vertical right"))
-        self.dict["walls"].append(wall.Wall(0, globals.DISPLAY_HEIGHT, globals.DISPLAY_WIDTH, 0, "horizontal bottom"))
+        self.dict["walls"].append(wall.Wall("top"))
+        self.dict["walls"].append(wall.Wall("bottom"))
+        self.dict["walls"].append(wall.Wall("left"))
+        self.dict["walls"].append(wall.Wall("right"))
 
         self.dict["background"] = []
         self.dict["background"].append(background.Background(self.screen))
@@ -43,6 +43,9 @@ class Sprites():
 
         self.dict["bullets"] = []
 
+        self.dict["pointer"] = []
+        self.dict["pointer"].append(pointer.Pointer(self.screen, self.dict))
+
 
     def animate(self):
         #print(f"RAM memory % used: {psutil.virtual_memory()[2]}")
@@ -50,22 +53,21 @@ class Sprites():
         
         eventsQueueArr = pygame.event.get()
 
-        try: # keys are subject to change
-            for key in self.dict.keys():
-                if key.endswith(".paused"): continue
+        keysArr = list(self.dict.keys())
+        for key in keysArr:
+            if key.endswith(".paused"): continue
+            if key not in self.dict: break # key no longer there, meaning that menu was toggled and all the other keys were changed as well
 
-                for sprite in self.dict[key][:]: # itterate over array and remove items simuntaniously
-                    if hasattr(sprite, 'shouldDelete') and sprite.shouldDelete:
-                        self.dict[key].remove(sprite) # this removes its reference in self.dict
-                        del sprite # this removes the sprite instance itself
-                        continue
-                    if hasattr(sprite, 'user_input'):
-                        sprite.user_input(eventsQueueArr)
-                    if hasattr(sprite, 'update_location'):
-                        sprite.update_location()
-                    if hasattr(sprite, 'blit'):
-                        sprite.blit()
-        except:
-            pass
+            for sprite in self.dict[key][:]: # itterate over array and remove items simuntaniously
+                if hasattr(sprite, 'user_input'):
+                    sprite.user_input(eventsQueueArr)
+                if hasattr(sprite, 'update_location'):
+                    sprite.update_location()
+                if hasattr(sprite, 'shouldDelete') and sprite.shouldDelete:
+                    self.dict[key].remove(sprite) # this removes its reference in self.dict
+                    del sprite # this removes the sprite instance itself
+                    continue
+                if hasattr(sprite, 'blit'):
+                    sprite.blit()
                 
         pygame.display.update()
