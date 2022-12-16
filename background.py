@@ -1,9 +1,6 @@
 import pygame
 import globals
 
-# Two backgrounds, side by side
-# [ { ][ } ] => {}:screen , []:backgrounds:left:right
-
 class Background():
 
     ######################################################################

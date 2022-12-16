@@ -7,6 +7,7 @@ import background
 import player
 import enemy
 import pointer
+import helicopter
 
 class Sprites():
 
@@ -36,6 +37,9 @@ class Sprites():
 
         self.dict["player"] = []
         self.dict["player"].append(player.Player(self.screen, self.dict))
+
+        self.dict["helicopter"] = []
+        self.dict["helicopter"].append(helicopter.Helicopter(self.screen, self.dict))
 
         '''self.dict["enemies"] = []
         for i in range(6):

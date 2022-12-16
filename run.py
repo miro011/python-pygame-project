@@ -1,6 +1,7 @@
 import pygame
 import globals
 import sprites
+import time
 
 #################################################################
 
@@ -11,4 +12,6 @@ pygame.mouse.set_visible(False)
 
 sprites = sprites.Sprites(screen)
 
-while 1==1: sprites.animate()
+while 1==1:
+    sprites.animate()
+    time.sleep(globals.REFRESH_DELAY_S)
