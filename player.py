@@ -15,8 +15,8 @@ class Player():
         self.rect = self.image.get_rect()
         self.rect.center = (globals.DISPLAY_WIDTH/2, globals.DISPLAY_HEIGHT-40)
         
-        self.speedX = 3
-        self.speedY = 3
+        self.speedX = 2
+        self.speedY = 2
 
         self.curSpeedX = 0
         self.curSpeedY = 0

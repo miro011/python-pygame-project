@@ -19,7 +19,7 @@ class Enemy():
         self.rect.center = (x,y)
 
 
-        self.speedX = 2
+        self.speedX = 1
         self.speedY = 0
 
         self.shouldDelete = False

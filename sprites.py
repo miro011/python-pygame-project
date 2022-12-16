@@ -37,9 +37,9 @@ class Sprites():
         self.dict["player"] = []
         self.dict["player"].append(player.Player(self.screen, self.dict))
 
-        self.dict["enemies"] = []
+        '''self.dict["enemies"] = []
         for i in range(6):
-            self.dict["enemies"].append(enemy.Enemy(self.screen, self.dict))
+            self.dict["enemies"].append(enemy.Enemy(self.screen, self.dict))'''
 
         self.dict["bullets"] = []
 

@@ -1,8 +1,8 @@
 ######################################################################
 # VARIABLES
 
-DISPLAY_WIDTH = 800
-DISPLAY_HEIGHT = 600
+DISPLAY_WIDTH = 1280
+DISPLAY_HEIGHT = 640
 
 WHITE_COLOR=(255, 255, 255)
 YELLOW_COLOR=(255, 255, 0)
