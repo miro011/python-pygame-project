@@ -1,6 +1,5 @@
 import pygame
 import globals
-import bullet
 
 class Player():
 
@@ -11,15 +10,14 @@ class Player():
         self.screen = screen
         self.spritesDict = spritesDict
         
-        self.image = pygame.image.load("./media/images/spaceship.png")
-        self.rect = self.image.get_rect()
-        self.rect.center = (globals.DISPLAY_WIDTH/2, globals.DISPLAY_HEIGHT-40)
-        
-        self.speedX = 2
-        self.speedY = 2
+        self.image = None
+        self.rect = None
 
-        self.curSpeedX = 0
-        self.curSpeedY = 0
+        self.nextImgNum = 0
+        self.set_image()
+
+        self.nextImageTimer = globals.RepeatTimer(0.05, self.set_image)
+        self.nextImageTimer.start()
 
 
     ######################################################################
@@ -27,28 +25,12 @@ class Player():
         
     def user_input(self, eventsQueueArr):
         for event in eventsQueueArr:
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RIGHT:
-                    self.curSpeedX = self.speedX
-                if event.key == pygame.K_LEFT:
-                    self.curSpeedX = self.speedX * -1
-                if event.key == pygame.K_DOWN:
-                    self.curSpeedY = self.speedY
-                if event.key == pygame.K_UP:
-                    self.curSpeedY = self.speedY * -1
-                if event.key == pygame.K_SPACE:
-                    self.shoot()
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
-                    self.curSpeedX = 0
-                if event.key == pygame.K_DOWN or event.key == pygame.K_UP:
-                    self.curSpeedY = 0
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == "RIGHT":
+                self.jump()
 
 
     def update_location(self):
-        newRect = self.rect.move(self.curSpeedX, self.curSpeedY)
-        if newRect.collidelist(self.spritesDict["walls"]) == -1:
-            self.rect = newRect
+        return
     
     def blit(self):
         self.screen.blit(self.image, self.rect)
@@ -57,5 +39,19 @@ class Player():
     ######################################################################
     # SPECIAL
 
-    def shoot(self):
-        self.spritesDict["bullets"].append(bullet.Bullet(self.screen, self.spritesDict, self.rect.center[0], self.rect.top))
+    def set_image(self):
+        while True:
+            try:
+                self.image = pygame.image.load(f"./media/images/player/{self.nextImgNum}.gif")
+                break
+            except:
+                self.nextImgNum = 0
+
+        self.nextImgNum += 1
+
+        self.rect = self.image.get_rect()
+        self.rect.move_ip(100, (globals.DISPLAY_HEIGHT-self.image.get_height())-40)
+
+
+    def jump(self):
+        return

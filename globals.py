@@ -20,6 +20,7 @@ BLUE_COLOR = (0, 0, 128)
 # timer = RepeatTimer(intSecs, funcNameToRun)
 # timer.start() | timer.cancel()
 # timer.cancel()
+# ALTERNATIVE: pygame.time.get_ticks
 class RepeatTimer(Timer):
     def run(self):
         while not self.finished.wait(self.interval):
