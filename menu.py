@@ -6,17 +6,21 @@ class Menu():
     ######################################################################
     # CONSTRUCTOR
     
-    def __init__(self, screen, spritesDict, status):
+    def __init__(self, screen, spritesInst, status, menuType):
         self.screen = screen
-        self.spritesDict = spritesDict
+        self.spritesInst = spritesInst
         self.status = status # -1 is off, 1 is on
+        self.menuType = menuType
 
-        # Menu image
-        self.image = pygame.image.load("./media/images/menu-background.jpg")
+        menuImgName = "menu-background-welcome" if self.menuType == "welcome" else "menu-background"
+        self.image = pygame.image.load(f"./media/images/{menuImgName}.jpg")
         self.rect = self.image.get_rect()
 
-        # Menu text
-        self.textLineObjsArr = self.generate_multiline_text_elems("[1] Resume\n\n[2] Quit")
+        textStr = None
+        if self.menuType == "welcome": textStr = "[1] PLAY"
+        elif self.menuType == "pause": textStr = "PAUSED\n\n\n[1] resume\n\n[2] quit"
+        elif self.menuType == "over": textStr = "GAME OVER\n\n\n[1] try again\n\n[2] quit"
+        self.textLineObjsArr = self.generate_multiline_text_elems(textStr)
 
     ######################################################################
     # OPTIONAL
@@ -24,11 +28,21 @@ class Menu():
     def user_input(self, eventsQueueArr):
         for event in eventsQueueArr:
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_ESCAPE: self.toggle_menu()
-                elif self.status == 1 and event.key == pygame.K_1: self.toggle_menu()
-                elif self.status == 1 and event.key == pygame.K_2: pygame.quit()
+                if self.menuType == "welcome":
+                    if self.status == 1 and event.key == pygame.K_1:
+                        self.spritesInst.load_dict()
+                elif self.menuType == "pause":
+                    if event.key == pygame.K_ESCAPE or (self.status == 1 and event.key == pygame.K_1):
+                        self.toggle_menu()
+                    elif self.status == 1 and event.key == pygame.K_2:
+                        pygame.quit()
+                elif self.menuType == "over":
+                    if self.status == 1 and event.key == pygame.K_1:
+                        self.spritesInst.load_dict()
+                        self.toggle_menu()
 
     def blit(self):
+        if self.status != 1: return
         self.screen.blit(self.image, self.rect)
         for textLineObj in self.textLineObjsArr: self.screen.blit(textLineObj["text"], textLineObj["rect"])
 
@@ -63,9 +77,9 @@ class Menu():
     def toggle_menu(self):
         self.status *= -1
 
-        keysArr = list(self.spritesDict.keys()) # for some odd reason python keeps updating it when I change keys, and I need this to be static
+        keysArr = list(self.spritesInst.dict.keys()) # for some odd reason python keeps updating it when I change keys, and I need this to be static
         for key in keysArr:
-            if key == "menu": continue
+            if key == f"{self.menuType}_menu": continue
             newKey = f"{key}.paused" if self.status == 1 else key[:-7]
-            self.spritesDict[newKey] = self.spritesDict[key]
-            del self.spritesDict[key]
+            self.spritesInst.dict[newKey] = self.spritesInst.dict[key]
+            del self.spritesInst.dict[key]

@@ -17,14 +17,20 @@ class Sprites():
     def __init__(self, screen):
         self.screen = screen
         self.dict = {}
-        self.populate_dict_always()
+        self.load_dict_welcome()
 
+    
+    def load_dict_welcome(self):
+        self.dict["welcome_menu"] = []
+        self.dict["welcome_menu"].append(menu.Menu(self.screen, self, 1, "welcome"))
 
-    # this is run despite of level
-    def populate_dict_always(self):
+    def load_dict(self):
 
-        self.dict["menu"] = []
-        self.dict["menu"].append(menu.Menu(self.screen, self.dict, -1))
+        self.dict["pause_menu"] = []
+        self.dict["pause_menu"].append(menu.Menu(self.screen, self, -1, "pause"))
+
+        self.dict["over_menu"] = []
+        self.dict["over_menu"].append(menu.Menu(self.screen, self, -1, "over"))
 
         self.dict["walls"] = []
         self.dict["walls"].append(wall.Wall("top"))
