@@ -31,6 +31,8 @@ class Player():
         self.jumpInProg = False
         self.jumpMaxHeight = self.spritesDict["drone"][0].rect.bottom
 
+        self.direcion = 1 # 1 = forward / -1 = backward
+
 
     ######################################################################
     # OPTIONAL
@@ -50,6 +52,11 @@ class Player():
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
                     self.curSpeedX = 0
                     self.nextImageTimer.interval = self.nextImageTimerDfDelay
+            if event.type == pygame.MOUSEBUTTONUP:
+                print("hello")
+                if event.button == 3: # 1-left 2-middle, 3-right, 4-scrollup, 5-scrolldown
+                    self.toggle_direction()
+
 
 
     def update_location(self):
@@ -81,6 +88,11 @@ class Player():
             self.curSpeedY = 0
             self.nextImageTimer = globals.RepeatTimer(self.nextImageTimerDfDelay, self.set_image)
             self.nextImageTimer.start()
+
+    def toggle_direction(self):
+        self.direcion *= -1
+        self.spritesDict["background"][0].speedX *= -1
+
         
     ######################################################################
     # OTHER
@@ -89,6 +101,7 @@ class Player():
         while True:
             try:
                 self.image = pygame.image.load(f"./media/images/player/{self.nextImgNum}.gif")
+                if self.direcion == -1: self.image = pygame.transform.flip(self.image, True, False)
                 break
             except:
                 self.nextImgNum = 0

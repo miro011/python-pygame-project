@@ -22,14 +22,18 @@ class Background():
         self.speedX = -5
         self.speedY = 0
 
+        self.direcion = 1 # 1 = forward / -1 = backward
+
     ######################################################################
     # OPTIONAL
 
     def update_location(self):
         for i in range(len(self.rectsArr)):
             self.rectsArr[i] = self.rectsArr[i].move(self.speedX, self.speedY)
-            if self.rectsArr[i].right <= 0:
-                self.rectsArr[i].update(globals.DISPLAY_WIDTH, 0, self.imagesArr[i].get_width(), self.imagesArr[i].get_height())
+            if (self.speedX < 0 and self.rectsArr[i].right <= 0) or (self.speedX > 0 and self.rectsArr[i].left >= globals.DISPLAY_WIDTH):
+                leftXCoord = globals.DISPLAY_WIDTH
+                if self.speedX > 0: leftXCoord *= -1
+                self.rectsArr[i].update(leftXCoord, 0, self.imagesArr[i].get_width(), self.imagesArr[i].get_height())
 
 
     def blit(self):
