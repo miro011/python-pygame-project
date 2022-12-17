@@ -19,7 +19,7 @@ class Background():
             rect = pygame.Rect(xLeftCoord, 0, image.get_width(), image.get_height())
             self.rectsArr.append(rect)
 
-        self.speedX = -1
+        self.speedX = -5
         self.speedY = 0
 
     ######################################################################

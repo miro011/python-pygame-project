@@ -9,30 +9,27 @@ class Player():
     def __init__(self, screen, spritesDict):
         self.screen = screen
         self.spritesDict = spritesDict
+
+        self.dfYDistFromBottom = 40
         
-        self.nextImgNum = 0
-        self.image = pygame.image.load(f"./media/images/player/{self.nextImgNum}.gif")
+        
+        self.image = pygame.image.load(f"./media/images/player/0.gif")
         self.rect = self.image.get_rect()
-        
-        self.dfLeftXCoord = 100 # where the player will spawn
-        self.dfTopYCoord = globals.DISPLAY_HEIGHT - self.image.get_height() - 40 # also used with jumping
+        self.rect.center = (globals.DISPLAY_WIDTH/2, globals.DISPLAY_HEIGHT - (self.image.get_height()/2) - self.dfYDistFromBottom)
 
-        self.rect.move_ip(self.dfLeftXCoord, self.dfTopYCoord)
-
-        self.set_image()
-
+        self.nextImgNum = 0
         self.nextImageTimerDfDelay = 0.05
         self.nextImageTimer = globals.RepeatTimer(self.nextImageTimerDfDelay, self.set_image)
         self.nextImageTimer.start()
 
-        self.speedX = 5
+        self.speedX = 8
         self.speedY = 15 # jump duration
 
         self.curSpeedX = 0
         self.curSpeedY = 0
 
         self.jumpInProg = False
-        self.jumpMaxHeight = self.spritesDict["helicopter"][0].rect.bottom
+        self.jumpMaxHeight = self.spritesDict["drone"][0].rect.bottom
 
 
     ######################################################################
@@ -79,7 +76,7 @@ class Player():
     def manage_jump(self):
         if self.rect.top <= self.jumpMaxHeight: # jump has reached max height, time to go down
             self.curSpeedY = self.curSpeedY * -1
-        elif self.rect.top >= self.dfTopYCoord: # has landed
+        elif self.rect.bottom >= globals.DISPLAY_HEIGHT - self.dfYDistFromBottom: # has landed
             self.jumpInProg = False
             self.curSpeedY = 0
             self.nextImageTimer = globals.RepeatTimer(self.nextImageTimerDfDelay, self.set_image)
