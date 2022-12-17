@@ -17,20 +17,20 @@ class Sprites():
     def __init__(self, screen):
         self.screen = screen
         self.dict = {}
-        self.load_dict_welcome()
-
-    
-    def load_dict_welcome(self):
-        self.dict["welcome_menu"] = []
-        self.dict["welcome_menu"].append(menu.Menu(self.screen, self, 1, "welcome"))
+        self.load_dict()
+        self.dict["welcome_menu"][0].toggle_menu()
 
     def load_dict(self):
+        self.dict = {}
+        
+        self.dict["welcome_menu"] = []
+        self.dict["welcome_menu"].append(menu.Menu(self, -1, "welcome"))
 
         self.dict["pause_menu"] = []
-        self.dict["pause_menu"].append(menu.Menu(self.screen, self, -1, "pause"))
+        self.dict["pause_menu"].append(menu.Menu(self, -1, "pause"))
 
         self.dict["over_menu"] = []
-        self.dict["over_menu"].append(menu.Menu(self.screen, self, -1, "over"))
+        self.dict["over_menu"].append(menu.Menu(self, -1, "over"))
 
         self.dict["walls"] = []
         self.dict["walls"].append(wall.Wall("top"))

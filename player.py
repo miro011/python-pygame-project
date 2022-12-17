@@ -43,10 +43,10 @@ class Player():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RIGHT:
                     self.curSpeedX = self.speedX
-                    self.nextImageTimer.interval = self.nextImageTimerDfDelay / 1.5 # make the animation faster
+                    self.nextImageTimer.interval = self.nextImageTimerDfDelay / 1.5 if self.direcion == 1 else self.nextImageTimerDfDelay * 1.5 # make the animation faster/slower
                 if event.key == pygame.K_LEFT:
                     self.curSpeedX = self.speedX * -1
-                    self.nextImageTimer.interval = self.nextImageTimerDfDelay * 1.5 # make the animation slower
+                    self.nextImageTimer.interval = self.nextImageTimerDfDelay * 1.5 if self.direcion == 1 else self.nextImageTimerDfDelay / 1.5 # make the animation faster/slower
                 if event.key == pygame.K_UP:
                     self.init_jump()
             if event.type == pygame.KEYUP:
@@ -63,6 +63,10 @@ class Player():
         newRect = self.rect.move(self.curSpeedX, self.curSpeedY)
         if newRect.collidelist(self.spritesDict["walls"]) == -1:
             self.rect = newRect
+        else:
+            if self.jumpInProg: 
+                self.rect = self.rect.move(0, self.curSpeedY) # fixes bug where player gets stuck on wall while mid-jump
+
 
         if self.jumpInProg: self.manage_jump()
 

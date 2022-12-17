@@ -6,9 +6,10 @@ class Menu():
     ######################################################################
     # CONSTRUCTOR
     
-    def __init__(self, screen, spritesInst, status, menuType):
-        self.screen = screen
+    def __init__(self, spritesInst, status, menuType):
         self.spritesInst = spritesInst
+        self.screen = self.spritesInst.screen
+
         self.status = status # -1 is off, 1 is on
         self.menuType = menuType
 
@@ -31,11 +32,12 @@ class Menu():
                 if self.menuType == "welcome":
                     if self.status == 1 and event.key == pygame.K_1:
                         self.spritesInst.load_dict()
+                        #self.toggle_menu()
                 elif self.menuType == "pause":
                     if event.key == pygame.K_ESCAPE or (self.status == 1 and event.key == pygame.K_1):
                         self.toggle_menu()
                     elif self.status == 1 and event.key == pygame.K_2:
-                        pygame.quit()
+                        self.quit_the_game()
                 elif self.menuType == "over":
                     if self.status == 1 and event.key == pygame.K_1:
                         self.spritesInst.load_dict()
@@ -46,8 +48,23 @@ class Menu():
         self.screen.blit(self.image, self.rect)
         for textLineObj in self.textLineObjsArr: self.screen.blit(textLineObj["text"], textLineObj["rect"])
 
+    
     ######################################################################
     # SPECIAL
+
+    def toggle_menu(self):
+        self.status *= -1
+
+        keysArr = list(self.spritesInst.dict.keys()) # for some odd reason python keeps updating it when I change keys, and I need this to be static
+        for key in keysArr:
+            if key == f"{self.menuType}_menu": continue
+            newKey = f"{key}.paused" if self.status == 1 else key[:-7]
+            self.spritesInst.dict[newKey] = self.spritesInst.dict[key]
+            del self.spritesInst.dict[key]
+
+
+    ######################################################################
+    # OTHER
 
     # return an array of text lines: [{text:textElem, rect:rectElem}...]
     def generate_multiline_text_elems(self, textStr):
@@ -74,12 +91,7 @@ class Menu():
 
         return output
 
-    def toggle_menu(self):
-        self.status *= -1
 
-        keysArr = list(self.spritesInst.dict.keys()) # for some odd reason python keeps updating it when I change keys, and I need this to be static
-        for key in keysArr:
-            if key == f"{self.menuType}_menu": continue
-            newKey = f"{key}.paused" if self.status == 1 else key[:-7]
-            self.spritesInst.dict[newKey] = self.spritesInst.dict[key]
-            del self.spritesInst.dict[key]
+    def quit_the_game(self):
+        pygame.quit()
+        raise SystemExit(0)
