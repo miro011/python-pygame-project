@@ -12,11 +12,11 @@ class Menu():
         self.status = status # -1 is off, 1 is on
 
         # Menu image
-        self.image = pygame.image.load("./media/images/menu-background.png")
+        self.image = pygame.image.load("./media/images/menu-background.jpg")
         self.rect = self.image.get_rect()
 
         # Menu text
-        self.textLineObjsArr = self.generate_multiline_text_elems("1.Resume\n2.Quit")
+        self.textLineObjsArr = self.generate_multiline_text_elems("[1] Resume\n\n[2] Quit")
 
     ######################################################################
     # OPTIONAL

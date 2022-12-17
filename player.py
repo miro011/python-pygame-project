@@ -1,5 +1,6 @@
 import pygame
 import globals
+import repeattimer
 
 class Player():
 
@@ -19,7 +20,7 @@ class Player():
 
         self.nextImgNum = 0
         self.nextImageTimerDfDelay = 0.05
-        self.nextImageTimer = globals.RepeatTimer(self.nextImageTimerDfDelay, self.set_image)
+        self.nextImageTimer = repeattimer.RepeatTimer(self.nextImageTimerDfDelay, self.set_image)
         self.nextImageTimer.start()
 
         self.speedX = 8
@@ -53,7 +54,6 @@ class Player():
                     self.curSpeedX = 0
                     self.nextImageTimer.interval = self.nextImageTimerDfDelay
             if event.type == pygame.MOUSEBUTTONUP:
-                print("hello")
                 if event.button == 3: # 1-left 2-middle, 3-right, 4-scrollup, 5-scrolldown
                     self.toggle_direction()
 
@@ -86,7 +86,7 @@ class Player():
         elif self.rect.bottom >= globals.DISPLAY_HEIGHT - self.dfYDistFromBottom: # has landed
             self.jumpInProg = False
             self.curSpeedY = 0
-            self.nextImageTimer = globals.RepeatTimer(self.nextImageTimerDfDelay, self.set_image)
+            self.nextImageTimer = repeattimer.RepeatTimer(self.nextImageTimerDfDelay, self.set_image)
             self.nextImageTimer.start()
 
     def toggle_direction(self):
