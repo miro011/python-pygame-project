@@ -31,8 +31,8 @@ class Menu():
             if event.type == pygame.KEYUP:
                 if self.menuType == "welcome":
                     if self.status == 1 and event.key == pygame.K_1:
+                        self.status = -1
                         self.spritesInst.load_dict()
-                        #self.toggle_menu()
                 elif self.menuType == "pause":
                     if event.key == pygame.K_ESCAPE or (self.status == 1 and event.key == pygame.K_1):
                         self.toggle_menu()
@@ -40,8 +40,10 @@ class Menu():
                         self.quit_the_game()
                 elif self.menuType == "over":
                     if self.status == 1 and event.key == pygame.K_1:
+                        self.status = -1
                         self.spritesInst.load_dict()
-                        self.toggle_menu()
+                    elif self.status == 1 and event.key == pygame.K_2:
+                        self.quit_the_game()
 
     def blit(self):
         if self.status != 1: return
@@ -92,6 +94,5 @@ class Menu():
         return output
 
     def quit_the_game(self):
-        #self.stop_all_repeat_timers()
         pygame.quit()
         raise SystemExit(0)

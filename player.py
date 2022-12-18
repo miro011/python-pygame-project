@@ -98,6 +98,7 @@ class Player():
     def toggle_direction(self):
         self.direcion *= -1
         self.spritesDict["background"][0].speedX *= -1
+        self.spritesDict["cross"][0].speedX *= -1
 
         
     ######################################################################

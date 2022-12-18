@@ -8,6 +8,7 @@ import player
 import enemy
 import pointer
 import drone
+import cross
 
 class Sprites():
 
@@ -46,6 +47,9 @@ class Sprites():
 
         self.dict["player"] = []
         self.dict["player"].append(player.Player(self.screen, self.dict))
+
+        self.dict["cross"] = []
+        self.dict["cross"].append(cross.Cross(self.screen, self.dict))
 
         '''self.dict["enemies"] = []
         for i in range(6):

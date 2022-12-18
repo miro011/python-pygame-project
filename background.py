@@ -39,3 +39,15 @@ class Background():
     def blit(self):
         for i in range(len(self.rectsArr)):
             self.screen.blit(self.imagesArr[i], self.rectsArr[i])
+
+    ######################################################################
+    # OTHER
+
+    # return the x coordinates for both background in a sorted array
+    def get_x_sorted_coords(self):
+        arr = []
+        for rect in self.rectsArr:
+            arr.append(rect.left)
+            arr.append(rect.right)
+        arr.sort()
+        return arr
