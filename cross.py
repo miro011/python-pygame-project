@@ -1,6 +1,7 @@
 import pygame
 import globals
 import random
+import enemy
 
 class Cross():
 
@@ -37,9 +38,28 @@ class Cross():
         stillOnBackground = True if self.rect.collidelist(self.spritesDict["background"][0].rectsArr) >= 0 else False
         collidedWithPlayer = True if self.rect.collidelist(self.spritesDict["player"]) >= 0 else False
 
-        if not stillOnBackground or collidedWithPlayer:
-            self.shouldDelete = True
-            self.spritesDict["cross"].append(Cross(self.screen, self.spritesDict))
+        if collidedWithPlayer:
+            globals.ENEMY_SPLIT_CHANCE = globals.ENEMY_SPLIT_CHANCE - int(globals.ENEMY_SPLIT_CHANCE/10) # relative reduction
+            self.kill_enemies()
+            self.respawn()
+        if not stillOnBackground:
+            self.respawn()
+            
 
     def blit(self):
         self.screen.blit(self.image, self.rect)
+
+    ######################################################################
+    # OTHER
+
+    def respawn(self):
+        self.shouldDelete = True
+        self.spritesDict["cross"].append(Cross(self.screen, self.spritesDict))
+
+    def kill_enemies(self):
+        for enemySprite in self.spritesDict["enemies"]:
+            enemySprite.nextImageTimer.cancel()
+            enemySprite.shouldDelete = True
+
+        for i in range(globals.ENEMY_DF_NUMBER):
+            self.spritesDict["enemies"].append(enemy.Enemy(self.screen, self.spritesDict))

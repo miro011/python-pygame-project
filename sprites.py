@@ -1,6 +1,7 @@
 import pygame
 import psutil
 
+import globals
 import menu
 import wall
 import background
@@ -52,7 +53,7 @@ class Sprites():
         self.dict["cross"].append(cross.Cross(self.screen, self.dict))
 
         self.dict["enemies"] = []
-        for i in range(1):
+        for i in range(globals.ENEMY_DF_NUMBER):
             self.dict["enemies"].append(enemy.Enemy(self.screen, self.dict))
 
         self.dict["bullets"] = []

@@ -19,7 +19,7 @@ class Background():
             rect = pygame.Rect(xLeftCoord, 0, image.get_width(), image.get_height())
             self.rectsArr.append(rect)
 
-        self.speedX = -5
+        self.speedX = -3
         self.speedY = 0
 
         self.direcion = 1 # 1 = forward / -1 = backward

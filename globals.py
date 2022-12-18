@@ -11,7 +11,6 @@ BLUE_COLOR = (0, 0, 128)
 
 DIST_FROM_BOTTOM = 40 # used so that I can put a HUD on the bottom (player, enemies etc.)
 
-ENEMY_SPLIT_CHANCE = 50 # 50% chance that when an enemy is killed, 2 additional once will be spawned
-# if ENEMY_SPLIT_CHANCE = 70%
-#randomint(0,100)
-#if 0-70 => spawn
+ENEMY_DF_NUMBER = 5
+ENEMY_SPLIT_CHANCE = 20 # 50% chance that when an enemy is killed, 2 additional once will be spawned (altered as games goes on)
+ENEMY_SPAWN_ON_THE_RIGHT_CHANCE = 90 # 70%
