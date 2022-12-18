@@ -36,7 +36,9 @@ class Bullet():
         self.rect.center = self.startV.lerp(self.finalV, progress)
         self.counter += 1
 
-        if progress == 1: self.shouldDelete = True
+        if progress == 1:
+            self.shouldDelete = True
+            self.spritesDict["drone"][0].isShooting = False
 
         '''enemyIndexesHitArr = self.rect.collidelistall(self.spritesDict["enemies"])
         for enemyIndex in enemyIndexesHitArr:

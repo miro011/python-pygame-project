@@ -48,14 +48,14 @@ class Enemy():
             # make it so that the enemy is slower when following player and faster when going towards player
             playerDir = self.spritesDict["player"][0].direcion
             playerRect = self.spritesDict["player"][0].rect
-            if (self.rect.left > playerRect.right and playerDir == 1) or (self.rect.right < playerRect.left and playerDir == -1):
+            if (self.rect.left > playerRect.left and playerDir == 1) or (self.rect.right < playerRect.right and playerDir == -1):
                 speed *= 3
 
             # calculate movement, collisions etc.
             startV = pygame.Vector2(self.rect.center)
             finalV = pygame.Vector2(self.spritesDict["player"][0].rect.center)
             numUpdates = int(startV.distance_to(finalV) / speed)
-            if numUpdates < 10: # using this to detect collision with player and purposefully a bit loose so player can somewhat avoid
+            if numUpdates < 10: # using this to detect collision with player so it can be looser (lower = looser)
                 self.spritesDict["over_menu"][0].toggle_menu()
                 return
             progress = 1 / numUpdates
@@ -73,13 +73,7 @@ class Enemy():
     def respawn(self):
         self.nextImageTimer.cancel()
         self.shouldDelete = True
-
-        globals.ENEMY_SPLIT_CHANCE += 1
-
-        shouldSplit = self.calculate_chancery(globals.ENEMY_SPLIT_CHANCE)
-        numOfNewSpawns = 2 if shouldSplit else 1
-        for i in range(numOfNewSpawns):
-            self.spritesDict["enemies"].append(Enemy(self.screen, self.spritesDict))
+        self.spritesDict["enemies"].append(Enemy(self.screen, self.spritesDict))
 
 
     ######################################################################

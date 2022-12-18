@@ -19,13 +19,15 @@ class Drone():
         self.nextImageTimer.daemon = True
         self.nextImageTimer.start()
 
+        self.isShooting = False
+
     ######################################################################
     # OPTIONAL
 
     def user_input(self, eventsQueueArr):
         for event in eventsQueueArr:
             if event.type == pygame.MOUSEBUTTONUP:
-                if event.button == 1: # 1-left 2-middle, 3-right, 4-scrollup, 5-scrolldown
+                if event.button == 1 and not self.isShooting: # 1-left 2-middle, 3-right, 4-scrollup, 5-scrolldown
                     self.shoot()
 
     def update_location(self):
@@ -42,6 +44,7 @@ class Drone():
     # SPECIAL
 
     def shoot(self):
+        self.isShooting = True
         self.spritesDict["bullets"].append(bullet.Bullet(self.screen, self.spritesDict))
 
 

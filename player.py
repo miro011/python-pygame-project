@@ -68,6 +68,18 @@ class Player():
 
         if self.jumpInProg: self.manage_jump()
 
+        # not a good placement but 1 player vs loop 5 enemies each
+        # makes it so that when the player is going forward and all enemies are behind him one of them respawn in front
+        if self.direcion == 1:
+            allBehind = True
+            for enemySprite in self.spritesDict["enemies"]:
+                if enemySprite.rect.left > self.rect.right:
+                    allBehind = False
+                    break
+            if allBehind:
+                self.spritesDict["enemies"][0].respawn()
+
+
     
     def blit(self):
         self.screen.blit(self.image, self.rect)

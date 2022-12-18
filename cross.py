@@ -39,7 +39,6 @@ class Cross():
         collidedWithPlayer = True if self.rect.collidelist(self.spritesDict["player"]) >= 0 else False
 
         if collidedWithPlayer:
-            globals.ENEMY_SPLIT_CHANCE = globals.ENEMY_SPLIT_CHANCE - int(globals.ENEMY_SPLIT_CHANCE/10) # relative reduction
             self.kill_enemies()
             self.respawn()
         if not stillOnBackground:
