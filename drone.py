@@ -16,6 +16,7 @@ class Drone():
         self.rect = self.image.get_rect()
 
         self.nextImageTimer = repeattimer.RepeatTimer(0.07, self.set_image)
+        self.nextImageTimer.daemon = True
         self.nextImageTimer.start()
 
     ######################################################################

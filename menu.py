@@ -91,7 +91,7 @@ class Menu():
 
         return output
 
-
     def quit_the_game(self):
+        #self.stop_all_repeat_timers()
         pygame.quit()
         raise SystemExit(0)

@@ -21,6 +21,7 @@ class Player():
         self.nextImgNum = 0
         self.nextImageTimerDfDelay = 0.05
         self.nextImageTimer = repeattimer.RepeatTimer(self.nextImageTimerDfDelay, self.set_image)
+        self.nextImageTimer.daemon = True # will be terminated abruptly by the Python process once all other non-daemon threads are finished (in this case none). Otherwise it hangs.
         self.nextImageTimer.start()
 
         self.speedX = 8
@@ -91,6 +92,7 @@ class Player():
             self.jumpInProg = False
             self.curSpeedY = 0
             self.nextImageTimer = repeattimer.RepeatTimer(self.nextImageTimerDfDelay, self.set_image)
+            self.nextImageTimer.daemon = True
             self.nextImageTimer.start()
 
     def toggle_direction(self):
