@@ -6,7 +6,6 @@ class Bullet():
     ######################################################################
     # CONSTRUCTOR
     
-    # x and y should be the coordinates of the ship (at least in the base game)
     def __init__(self, screen, spritesDict):
         self.screen = screen
         self.spritesDict = spritesDict

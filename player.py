@@ -32,6 +32,10 @@ class Player():
 
         self.direcion = 1 # 1 = forward / -1 = backward
 
+        self.kills = 0
+        self.distanceTravelled = 0 # +60/s (going forward) | Target: 120x60=7200 = 10 miles | Calc Remaining: 10 - (10 * (x/7200))
+        self.numEnemiesToEachSide = [0, 0] 
+
 
     ######################################################################
     # OPTIONAL
@@ -58,6 +62,11 @@ class Player():
 
 
     def update_location(self):
+        self.distanceTravelled = self.distanceTravelled + 1 if self.direcion == 1 else self.distanceTravelled - 1
+        if self.distanceTravelled >= globals.DISTANCE_TO_RUN:
+            self.spritesDict["victory_menu"][0].toggle_menu()
+            return
+
         newRect = self.rect.move(self.curSpeedX, self.curSpeedY)
         if newRect.collidelist(self.spritesDict["walls"]) == -1:
             self.rect = newRect
@@ -69,15 +78,22 @@ class Player():
         if self.jumpInProg: self.manage_jump()
 
         # not a good placement but 1 player vs loop 5 enemies each
-        # makes it so that when the player is going forward and all enemies are behind him one of them respawn in front
-        if self.direcion == 1:
-            allBehind = True
-            for enemySprite in self.spritesDict["enemies"]:
-                if enemySprite.rect.left > self.rect.right:
-                    allBehind = False
-                    break
-            if allBehind:
-                self.spritesDict["enemies"][0].respawn()
+        # makes it so that when the player is going forward and all enemies are behind him one of them respawns in front for balancing sake
+        # additionally, calculates the enemies on each side of the player for the HUD
+        allEnemiesBehind = True
+        self.numEnemiesToEachSide = [0, 0]
+
+        for enemySprite in self.spritesDict["enemies"]:
+            if self.direcion == 1 and enemySprite.rect.left > self.rect.right:
+                allEnemiesBehind = False
+            if enemySprite.rect.right < self.rect.right:
+                self.numEnemiesToEachSide[0] += 1
+            else:
+                self.numEnemiesToEachSide[1] += 1
+
+        if self.direcion == 1 and allEnemiesBehind:
+            for i in range(2):
+                self.spritesDict["enemies"][i].respawn(True)
 
 
     

@@ -21,6 +21,7 @@ class Menu():
         if self.menuType == "welcome": textStr = "[1] PLAY"
         elif self.menuType == "pause": textStr = "PAUSED\n\n\n[1] resume\n\n[2] quit"
         elif self.menuType == "over": textStr = "GAME OVER\n\n\n[1] try again\n\n[2] quit"
+        elif self.menuType == "victory": textStr = "CONGRATULATIONS, YOU MANAGED TO ESCAPE!!!\n\n\n[1] play again\n\n[2] quit"
         self.textLineObjsArr = self.generate_multiline_text_elems(textStr)
 
     ######################################################################
@@ -38,7 +39,7 @@ class Menu():
                         self.toggle_menu()
                     elif self.status == 1 and event.key == pygame.K_2:
                         self.quit_the_game()
-                elif self.menuType == "over":
+                elif self.menuType == "over" or self.menuType == "victory":
                     if self.status == 1 and event.key == pygame.K_1:
                         self.status = -1
                         self.spritesInst.load_dict()
@@ -76,7 +77,7 @@ class Menu():
         textLinesArr = textStr.split("\n")
 
         # used to get the height, so we can calculate and center mutliple lines
-        sampleTextElem = font.render(textLinesArr[0], True, globals.GREEN_COLOR, globals.BLUE_COLOR)
+        sampleTextElem = font.render(textLinesArr[0], True, globals.RED_COLOR)
         sampleTextRect = sampleTextElem.get_rect()
         
         lineHeight = sampleTextRect.height
@@ -85,7 +86,7 @@ class Menu():
         curElemYCenter = (((globals.DISPLAY_HEIGHT - overallHeight) / 2) + (lineHeight / 2)) # starting with the ones on the top
 
         for i in range(len(textLinesArr)):
-            textElem = font.render(textLinesArr[i], True, globals.GREEN_COLOR, globals.BLUE_COLOR)
+            textElem = font.render(textLinesArr[i], True, globals.RED_COLOR)
             textRect = textElem.get_rect()
             textRect.center = (globals.DISPLAY_WIDTH / 2, curElemYCenter) # set the center of the rectangular object
             output.append({"text":textElem, "rect":textRect})

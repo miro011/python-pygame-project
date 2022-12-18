@@ -8,11 +8,11 @@ class Enemy():
     ######################################################################
     # CONSTRUCTOR
 
-    def __init__(self, screen, spritesDict):
+    def __init__(self, screen, spritesDict, shouldSpanwOnTheRight=None):
         self.screen = screen
         self.spritesDict = spritesDict
 
-        shouldSpanwOnTheRight = self.calculate_chancery(globals.ENEMY_SPAWN_ON_THE_RIGHT_CHANCE)
+        shouldSpanwOnTheRight = shouldSpanwOnTheRight if shouldSpanwOnTheRight else self.calculate_chancery(globals.ENEMY_SPAWN_ON_THE_RIGHT_CHANCE)
         self.startSide = 1 if shouldSpanwOnTheRight else -1 # -1 left / 1 right
 
 
@@ -62,6 +62,7 @@ class Enemy():
             self.rect.center = startV.lerp(finalV, progress)
 
         if self.rect.collidelist(self.spritesDict["bullets"]) != -1:
+            self.spritesDict["player"][0].kills += 1
             self.respawn()
             
     def blit(self):
@@ -70,10 +71,10 @@ class Enemy():
     ######################################################################
     # RESPAWN
 
-    def respawn(self):
+    def respawn(self, shouldSpanwOnTheRight=None):
         self.nextImageTimer.cancel()
         self.shouldDelete = True
-        self.spritesDict["enemies"].append(Enemy(self.screen, self.spritesDict))
+        self.spritesDict["enemies"].append(Enemy(self.screen, self.spritesDict, shouldSpanwOnTheRight))
 
 
     ######################################################################

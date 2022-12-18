@@ -15,7 +15,6 @@ class Background():
         for xLeftCoord in [0, globals.DISPLAY_WIDTH]:
             image = pygame.image.load("./media/images/background.png")
             self.imagesArr.append(image)
-            # move_ip not working properly for me
             rect = pygame.Rect(xLeftCoord, 0, image.get_width(), image.get_height())
             self.rectsArr.append(rect)
 

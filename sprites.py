@@ -10,6 +10,7 @@ import enemy
 import pointer
 import drone
 import cross
+import hud
 
 class Sprites():
 
@@ -33,6 +34,9 @@ class Sprites():
 
         self.dict["over_menu"] = []
         self.dict["over_menu"].append(menu.Menu(self, "over"))
+
+        self.dict["victory_menu"] = []
+        self.dict["victory_menu"].append(menu.Menu(self, "victory"))
 
         self.dict["walls"] = []
         self.dict["walls"].append(wall.Wall("top"))
@@ -58,6 +62,9 @@ class Sprites():
 
         self.dict["bullets"] = []
 
+        self.dict["hud"] = []
+        self.dict["hud"].append(hud.Hud(self.screen, self.dict))
+
         self.dict["pointer"] = []
         self.dict["pointer"].append(pointer.Pointer(self.screen, self.dict))
 
@@ -79,7 +86,8 @@ class Sprites():
                 if hasattr(sprite, 'update_location'):
                     sprite.update_location()
                 if hasattr(sprite, 'shouldDelete') and sprite.shouldDelete:
-                    self.dict[key].remove(sprite) # this removes its reference in self.dict
+                    try: self.dict[key].remove(sprite) # this removes its reference in self.dict
+                    except: pass # bug fix
                     del sprite # this removes the sprite instance itself
                     continue
                 if hasattr(sprite, 'blit'):
