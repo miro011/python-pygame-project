@@ -6,11 +6,11 @@ class Menu():
     ######################################################################
     # CONSTRUCTOR
     
-    def __init__(self, spritesInst, status, menuType):
+    def __init__(self, spritesInst, menuType):
         self.spritesInst = spritesInst
         self.screen = self.spritesInst.screen
 
-        self.status = status # -1 is off, 1 is on
+        self.status = -1 # -1 is off, 1 is on
         self.menuType = menuType
 
         menuImgName = "menu-background-welcome" if self.menuType == "welcome" else "menu-background"

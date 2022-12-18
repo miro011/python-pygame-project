@@ -17,7 +17,7 @@ class Cross():
         leftXCoord = bgSortedXCoords[0] if self.spritesDict["background"][0].speedX > 0 else bgSortedXCoords[-1] - self.image.get_width()
         topYCoord = random.randint(
             self.spritesDict["player"][0].jumpMaxHeight, 
-            globals.DISPLAY_HEIGHT - self.spritesDict["player"][0].dfYDistFromBottom - self.image.get_height()
+            globals.DISPLAY_HEIGHT - globals.DIST_FROM_BOTTOM - self.image.get_height()
         )
 
         self.rect = self.image.get_rect()

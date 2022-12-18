@@ -10,13 +10,10 @@ class Player():
     def __init__(self, screen, spritesDict):
         self.screen = screen
         self.spritesDict = spritesDict
-
-        self.dfYDistFromBottom = 40
-        
         
         self.image = pygame.image.load(f"./media/images/player/0.gif")
         self.rect = self.image.get_rect()
-        self.rect.center = (globals.DISPLAY_WIDTH/2, globals.DISPLAY_HEIGHT - (self.image.get_height()/2) - self.dfYDistFromBottom)
+        self.rect.center = (globals.DISPLAY_WIDTH/2, globals.DISPLAY_HEIGHT - (self.image.get_height()/2) - globals.DIST_FROM_BOTTOM)
 
         self.nextImgNum = 0
         self.nextImageTimerDfDelay = 0.05
@@ -88,7 +85,7 @@ class Player():
     def manage_jump(self):
         if self.rect.top <= self.jumpMaxHeight: # jump has reached max height, time to go down
             self.curSpeedY = self.curSpeedY * -1
-        elif self.rect.bottom >= globals.DISPLAY_HEIGHT - self.dfYDistFromBottom: # has landed
+        elif self.rect.bottom >= globals.DISPLAY_HEIGHT - globals.DIST_FROM_BOTTOM: # has landed
             self.jumpInProg = False
             self.curSpeedY = 0
             self.nextImageTimer = repeattimer.RepeatTimer(self.nextImageTimerDfDelay, self.set_image)

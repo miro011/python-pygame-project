@@ -25,13 +25,13 @@ class Sprites():
         self.dict = {}
         
         self.dict["welcome_menu"] = []
-        self.dict["welcome_menu"].append(menu.Menu(self, -1, "welcome"))
+        self.dict["welcome_menu"].append(menu.Menu(self, "welcome"))
 
         self.dict["pause_menu"] = []
-        self.dict["pause_menu"].append(menu.Menu(self, -1, "pause"))
+        self.dict["pause_menu"].append(menu.Menu(self, "pause"))
 
         self.dict["over_menu"] = []
-        self.dict["over_menu"].append(menu.Menu(self, -1, "over"))
+        self.dict["over_menu"].append(menu.Menu(self, "over"))
 
         self.dict["walls"] = []
         self.dict["walls"].append(wall.Wall("top"))
@@ -51,9 +51,9 @@ class Sprites():
         self.dict["cross"] = []
         self.dict["cross"].append(cross.Cross(self.screen, self.dict))
 
-        '''self.dict["enemies"] = []
-        for i in range(6):
-            self.dict["enemies"].append(enemy.Enemy(self.screen, self.dict))'''
+        self.dict["enemies"] = []
+        for i in range(1):
+            self.dict["enemies"].append(enemy.Enemy(self.screen, self.dict))
 
         self.dict["bullets"] = []
 
