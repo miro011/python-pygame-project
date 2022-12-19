@@ -17,6 +17,8 @@ class Hud():
         self.distanceTravelled = 0 # +60/s (going forward) || Ex: | Target: 120x60=7200 = 10 miles | Calc Remaining: 10 - (10 * (x/7200))
         self.numEnemiesToEachSide = [0, 0] # enemies left of play , enemies right of player
         self.kills = 0
+
+        self.victorySound = pygame.mixer.Sound("./media/sounds/victory.ogg")
         
     ######################################################################
     # OPTIONAL
@@ -37,6 +39,7 @@ class Hud():
         self.distanceTravelled = self.distanceTravelled + 1 if playerDir == 1 else self.distanceTravelled - 1
 
         if self.distanceTravelled >= globals.DISTANCE_TO_RUN:
+            pygame.mixer.Sound.play(self.victorySound)
             self.spritesDict["victory_menu"][0].toggle_menu()
             return "max reached"
         

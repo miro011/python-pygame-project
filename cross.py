@@ -24,6 +24,8 @@ class Cross():
 
         self.shouldDelete = False
 
+        self.heavenSound = pygame.mixer.Sound("./media/sounds/heaven.ogg")
+
     ######################################################################
     # OPTIONAL
 
@@ -36,6 +38,8 @@ class Cross():
         collidedWithPlayer = True if self.rect.collidelist(self.spritesDict["player"]) >= 0 else False
 
         if collidedWithPlayer:
+            pygame.mixer.Sound.play(self.heavenSound)
+            pygame.mixer.Sound.play(self.spritesDict["enemies"][0].teleportSound)
             self.regulator.kill_all_enemies()
             self.regulator.spawn_df_num_enemies()
             self.respawn()

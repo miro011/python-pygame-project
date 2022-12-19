@@ -28,6 +28,9 @@ class Enemy():
 
         self.shouldDelete = False
 
+        self.teleportSound = pygame.mixer.Sound("./media/sounds/teleport.ogg")
+        self.monsterDeathSound = pygame.mixer.Sound("./media/sounds/monster-death.ogg")
+
     ######################################################################
     # OPTIONAL
 
@@ -45,6 +48,7 @@ class Enemy():
             numUpdates = int(startV.distance_to(finalV) / vectorSpeed)
 
             if numUpdates < 10: # using this to detect collision with player so it can be looser (lower = looser aka less likely to collide)
+                pygame.mixer.Sound.play(self.spritesDict["player"][0].screamSound)
                 self.spritesDict["over_menu"][0].toggle_menu()
                 return
 
@@ -53,6 +57,7 @@ class Enemy():
 
         # collision with bullet
         if self.rect.collidelist(self.spritesDict["bullets"]) != -1:
+            pygame.mixer.Sound.play(self.monsterDeathSound)
             self.spritesDict["hud"][0].kills += 1
             self.respawn()
             

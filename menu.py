@@ -85,7 +85,8 @@ class Menu():
     def set_per_menu_attrs(self):
         if self.menuType == "welcome":
             self.textStr = "[1] PLAY"
-            self.textColor = globals.WHITE_COLOR
+            self.textColor = globals.RED_COLOR
+            self.textBgColor = globals.BLACK_COLOR
         elif self.menuType == "pause":
             self.textStr = "PAUSED\n\n\n[1] resume\n\n[2] quit"
             self.textColor = globals.WHITE_COLOR

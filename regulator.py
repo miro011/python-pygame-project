@@ -54,6 +54,7 @@ class Regulator():
                 break
 
         if allEnemiesBehind:
+            pygame.mixer.Sound.play(self.spritesDict["enemies"][0].teleportSound)
             for i in range(2):
                 self.spritesDict["enemies"][i].respawn(True)
 

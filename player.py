@@ -32,6 +32,9 @@ class Player():
 
         self.direction = 1 # 1 = forward / -1 = backward
 
+        self.screamSound = pygame.mixer.Sound("./media/sounds/scream.ogg")
+        self.gruntSound = pygame.mixer.Sound("./media/sounds/grunt.ogg")
+
 
     ######################################################################
     # OPTIONAL
@@ -87,6 +90,7 @@ class Player():
 
     def init_jump(self):
         if self.jumpInProg: return
+        pygame.mixer.Sound.play(self.gruntSound)
         self.jumpInProg = True
         self.curSpeedY = self.speedY * -1 # needs to go up at first
         self.nextImageTimer.cancel() # no good way to pause/resume the timer, so I just quit it

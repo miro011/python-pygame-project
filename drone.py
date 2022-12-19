@@ -20,6 +20,10 @@ class Drone():
 
         self.isShooting = False
 
+        self.shootSound = pygame.mixer.Sound("./media/sounds/shoot.ogg")
+        self.droneSound = pygame.mixer.Sound("./media/sounds/drone.ogg")
+        self.droneSoundChannel = None
+
     ######################################################################
     # OPTIONAL
 
@@ -30,6 +34,7 @@ class Drone():
                     self.shoot()
 
     def update_location(self):
+        self.drone_sound_handler()
         newRect = self.rect.copy()
         newRect.center = (self.spritesDict["player"][0].rect.center[0], self.image.get_height()/2)
         if newRect.collidelist(self.spritesDict["walls"]) == -1:
@@ -43,9 +48,9 @@ class Drone():
     # SPECIAL
 
     def shoot(self):
+        pygame.mixer.Sound.play(self.shootSound)
         self.isShooting = True
         self.spritesDict["bullets"].append(bullet.Bullet(self.screen, self.spritesDict))
-
 
     ######################################################################
     # OTHER
@@ -59,3 +64,7 @@ class Drone():
                 self.nextImgNum = 0
 
         self.nextImgNum += 1
+
+    def drone_sound_handler(self):
+        if not self.droneSoundChannel or not self.droneSoundChannel.get_busy():
+            self.droneSoundChannel = self.droneSound.play()
