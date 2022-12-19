@@ -7,17 +7,16 @@ class Drone():
     ######################################################################
     # CONSTRUCTOR
     
-    def __init__(self, screen, spritesDict):
+    def __init__(self, screen, regulator, spritesDict):
         self.screen = screen
+        self.regulator = regulator
         self.spritesDict = spritesDict
 
         self.nextImgNum = 0
         self.image = pygame.image.load(f"./media/images/drone/{self.nextImgNum}.gif")
         self.rect = self.image.get_rect()
 
-        self.nextImageTimer = repeattimer.RepeatTimer(0.07, self.set_image)
-        self.nextImageTimer.daemon = True
-        self.nextImageTimer.start()
+        self.nextImageTimer = self.regulator.get_new_repeat_timer(0.07, self.set_image)
 
         self.isShooting = False
 
@@ -27,7 +26,7 @@ class Drone():
     def user_input(self, eventsQueueArr):
         for event in eventsQueueArr:
             if event.type == pygame.MOUSEBUTTONUP:
-                if event.button == 1 and not self.isShooting: # 1-left 2-middle, 3-right, 4-scrollup, 5-scrolldown
+                if not self.isShooting and event.button == 1: # 1-left 2-middle, 3-right, 4-scrollup, 5-scrolldown
                     self.shoot()
 
     def update_location(self):

@@ -14,8 +14,6 @@ class Pointer():
         self.image = pygame.image.load("./media/images/pointer.png")
         self.rect = self.image.get_rect()
 
-    def blit(self):
-        self.screen.blit(self.image, self.rect)
 
     ######################################################################
     # OPTIONAL
@@ -23,3 +21,6 @@ class Pointer():
     def update_location(self):
         mouseXyPos = pygame.mouse.get_pos()
         self.rect.center = mouseXyPos
+
+    def blit(self):
+        self.screen.blit(self.image, self.rect)

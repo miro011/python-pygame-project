@@ -8,25 +8,20 @@ class Enemy():
     ######################################################################
     # CONSTRUCTOR
 
-    def __init__(self, screen, spritesDict, shouldSpanwOnTheRight=None):
+    def __init__(self, screen, regulator, spritesDict, shouldSpanwOnTheRight=None):
         self.screen = screen
+        self.regulator = regulator
         self.spritesDict = spritesDict
 
-        shouldSpanwOnTheRight = shouldSpanwOnTheRight if shouldSpanwOnTheRight else self.calculate_chancery(globals.ENEMY_SPAWN_ON_THE_RIGHT_CHANCE)
-        self.startSide = 1 if shouldSpanwOnTheRight else -1 # -1 left / 1 right
+        self.startSide = self.get_start_side(shouldSpanwOnTheRight)
 
 
         self.image = pygame.image.load(f"./media/images/enemy/0.gif")
         self.rect = self.image.get_rect()
-        leftXCoord = random.randint(0, globals.DISPLAY_WIDTH)
-        leftXCoord = 0 - leftXCoord if self.startSide == -1 else globals.DISPLAY_WIDTH + leftXCoord # spanwn outside the screen
-        topYCoord = random.randint(0, globals.DISPLAY_HEIGHT - globals.DIST_FROM_BOTTOM - self.image.get_height())
-        self.rect.move_ip(leftXCoord, topYCoord)
+        self.set_rect_location()
 
         self.nextImgNum = 0
-        self.nextImageTimer = repeattimer.RepeatTimer(0.1, self.set_image)
-        self.nextImageTimer.daemon = True
-        self.nextImageTimer.start()
+        self.nextImageTimer = self.regulator.get_new_repeat_timer(0.1, self.set_image)
 
         self.offScreenSpeed = 5 if self.startSide == -1 else -5
         self.baseVectorSpeed = 2
@@ -37,44 +32,41 @@ class Enemy():
     # OPTIONAL
 
     def update_location(self):
-        if "player" not in self.spritesDict: return # when the game over menu is toggled, sprites.py continues looping through the rest of the enemies
+        if "enemies" not in self.spritesDict: return # when the game-over menu is toggled, sprites.py continues looping through the rest of the enemies
 
-        # move normally
-        if self.rect.center[0] < 0 or self.rect.center[0] > globals.DISPLAY_WIDTH:
+        if self.is_off_screen():
             self.rect = self.rect.move(self.offScreenSpeed, 0)
         else:
-            speed = self.baseVectorSpeed
-
-            # make it so that the enemy is slower when following player and faster when going towards player
-            playerDir = self.spritesDict["player"][0].direcion
-            playerRect = self.spritesDict["player"][0].rect
-            if (self.rect.left > playerRect.left and playerDir == 1) or (self.rect.right < playerRect.right and playerDir == -1):
-                speed *= 3
+            vectorSpeed = self.get_vector_speed()
 
             # calculate movement, collisions etc.
             startV = pygame.Vector2(self.rect.center)
             finalV = pygame.Vector2(self.spritesDict["player"][0].rect.center)
-            numUpdates = int(startV.distance_to(finalV) / speed)
-            if numUpdates < 10: # using this to detect collision with player so it can be looser (lower = looser)
+            numUpdates = int(startV.distance_to(finalV) / vectorSpeed)
+
+            if numUpdates < 10: # using this to detect collision with player so it can be looser (lower = looser aka less likely to collide)
                 self.spritesDict["over_menu"][0].toggle_menu()
                 return
+
             progress = 1 / numUpdates
             self.rect.center = startV.lerp(finalV, progress)
 
+        # collision with bullet
         if self.rect.collidelist(self.spritesDict["bullets"]) != -1:
-            self.spritesDict["player"][0].kills += 1
+            self.spritesDict["hud"][0].kills += 1
             self.respawn()
             
     def blit(self):
+        if "enemies" not in self.spritesDict: return
         self.screen.blit(self.image, self.rect)
 
     ######################################################################
-    # RESPAWN
+    # SPECIAL
 
     def respawn(self, shouldSpanwOnTheRight=None):
         self.nextImageTimer.cancel()
         self.shouldDelete = True
-        self.spritesDict["enemies"].append(Enemy(self.screen, self.spritesDict, shouldSpanwOnTheRight))
+        self.spritesDict["enemies"].append(Enemy(self.screen, self.regulator, self.spritesDict, shouldSpanwOnTheRight))
 
 
     ######################################################################
@@ -90,10 +82,38 @@ class Enemy():
 
         self.nextImgNum += 1
 
-    # returns true or false - it relates to the name of whatever variable is plugged into "percentValue"
-    # for example: chanceToDie = 70 . If this function retruns true it means "yes, you will die"
-    def calculate_chancery(self, percentValue):
-        # have to do this because it seems it will generate more small numbers when it is 1,100
-        percentValue = int(percentValue/10)
-        result = random.randint(0, 10)
-        return True if 0 <= result <= percentValue else False
+    def get_start_side(self, shouldSpanwOnTheRight):
+        if not shouldSpanwOnTheRight:
+            shouldSpanwOnTheRight = self.regulator.calculate_chancery(globals.ENEMY_SPAWN_ON_THE_RIGHT_CHANCE)
+        return 1 if shouldSpanwOnTheRight else -1 # -1 left / 1 right
+
+    def set_rect_location(self):
+        randomXCoordOnScreen = random.randint(0, globals.DISPLAY_WIDTH)
+
+        leftXCoord = None
+        if self.startSide == -1:
+            leftXCoord = 0 - randomXCoordOnScreen # spanw the enemy outside the screen on the left
+        else:
+            leftXCoord = globals.DISPLAY_WIDTH + randomXCoordOnScreen # spawn outside the screen on the right
+
+        topYCoord = random.randint(0, globals.DISPLAY_HEIGHT - globals.DIST_FROM_BOTTOM - self.image.get_height())
+
+        self.rect.move_ip(leftXCoord, topYCoord)
+
+    def is_off_screen(self):
+        if self.rect.center[0] < 0 or self.rect.center[0] > globals.DISPLAY_WIDTH:
+            return True
+        else:
+            return False
+
+    # makes it so that the enemy faster when going towards player
+    def get_vector_speed(self):
+        vectorSpeed = self.baseVectorSpeed
+        playerSprite = self.spritesDict["player"][0]
+
+        if playerSprite.direction == 1 and self.rect.left > playerSprite.rect.left:
+            vectorSpeed *= 3
+        elif playerSprite.direction == -1 and self.rect.right < playerSprite.rect.right:
+            vectorSpeed *= 3
+
+        return vectorSpeed

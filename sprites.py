@@ -11,6 +11,7 @@ import pointer
 import drone
 import cross
 import hud
+import regulator
 
 class Sprites():
 
@@ -20,12 +21,12 @@ class Sprites():
     def __init__(self, screen):
         self.screen = screen
         self.dict = {}
+        self.regulator = regulator.Regulator(self.screen, self.dict)
+
         self.load_dict()
         self.dict["welcome_menu"][0].toggle_menu()
 
     def load_dict(self):
-        self.dict = {}
-        
         self.dict["welcome_menu"] = []
         self.dict["welcome_menu"].append(menu.Menu(self, "welcome"))
 
@@ -48,17 +49,16 @@ class Sprites():
         self.dict["background"].append(background.Background(self.screen))
 
         self.dict["drone"] = []
-        self.dict["drone"].append(drone.Drone(self.screen, self.dict))
+        self.dict["drone"].append(drone.Drone(self.screen, self.regulator, self.dict))
 
         self.dict["player"] = []
-        self.dict["player"].append(player.Player(self.screen, self.dict))
+        self.dict["player"].append(player.Player(self.screen, self.regulator, self.dict))
 
         self.dict["cross"] = []
-        self.dict["cross"].append(cross.Cross(self.screen, self.dict))
+        self.dict["cross"].append(cross.Cross(self.screen, self.regulator, self.dict))
 
         self.dict["enemies"] = []
-        for i in range(globals.ENEMY_DF_NUMBER):
-            self.dict["enemies"].append(enemy.Enemy(self.screen, self.dict))
+        self.regulator.spawn_df_num_enemies()
 
         self.dict["bullets"] = []
 
