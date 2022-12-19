@@ -1,9 +1,0 @@
-Player is always running
-Movement speed increases
-Enemies randomly spawned (though at least slightly away from player)
-    if they get to you you die - have to shoot them
-Randomly generated sets of platforms containing coins/crosses
-    If you miss a set, enemy spawn freequency increases, as well as more likely for demons to spawn
-    
-    
-player is a ball with a sticking gun and it follows the mouse

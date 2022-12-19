@@ -1,5 +1,5 @@
 import pygame
-import psutil
+#import psutil
 
 import globals
 import menu
