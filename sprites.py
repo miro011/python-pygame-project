@@ -1,12 +1,17 @@
 import pygame
 import psutil
 
+import globals
 import menu
 import wall
 import background
 import player
 import enemy
 import pointer
+import drone
+import cross
+import hud
+import regulator
 
 class Sprites():
 
@@ -16,14 +21,23 @@ class Sprites():
     def __init__(self, screen):
         self.screen = screen
         self.dict = {}
-        self.populate_dict_always()
+        self.regulator = regulator.Regulator(self.screen, self.dict)
 
+        self.load_dict()
+        self.dict["welcome_menu"][0].toggle_menu()
 
-    # this is run despite of level
-    def populate_dict_always(self):
+    def load_dict(self):
+        self.dict["welcome_menu"] = []
+        self.dict["welcome_menu"].append(menu.Menu(self, "welcome"))
 
-        self.dict["menu"] = []
-        self.dict["menu"].append(menu.Menu(self.screen, self.dict, -1))
+        self.dict["pause_menu"] = []
+        self.dict["pause_menu"].append(menu.Menu(self, "pause"))
+
+        self.dict["over_menu"] = []
+        self.dict["over_menu"].append(menu.Menu(self, "over"))
+
+        self.dict["victory_menu"] = []
+        self.dict["victory_menu"].append(menu.Menu(self, "victory"))
 
         self.dict["walls"] = []
         self.dict["walls"].append(wall.Wall("top"))
@@ -34,14 +48,22 @@ class Sprites():
         self.dict["background"] = []
         self.dict["background"].append(background.Background(self.screen))
 
+        self.dict["drone"] = []
+        self.dict["drone"].append(drone.Drone(self.screen, self.regulator, self.dict))
+
         self.dict["player"] = []
-        self.dict["player"].append(player.Player(self.screen, self.dict))
+        self.dict["player"].append(player.Player(self.screen, self.regulator, self.dict))
+
+        self.dict["cross"] = []
+        self.dict["cross"].append(cross.Cross(self.screen, self.regulator, self.dict))
 
         self.dict["enemies"] = []
-        for i in range(6):
-            self.dict["enemies"].append(enemy.Enemy(self.screen, self.dict))
+        self.regulator.spawn_df_num_enemies()
 
         self.dict["bullets"] = []
+
+        self.dict["hud"] = []
+        self.dict["hud"].append(hud.Hud(self.screen, self.dict))
 
         self.dict["pointer"] = []
         self.dict["pointer"].append(pointer.Pointer(self.screen, self.dict))
@@ -64,7 +86,8 @@ class Sprites():
                 if hasattr(sprite, 'update_location'):
                     sprite.update_location()
                 if hasattr(sprite, 'shouldDelete') and sprite.shouldDelete:
-                    self.dict[key].remove(sprite) # this removes its reference in self.dict
+                    try: self.dict[key].remove(sprite) # this removes its reference in self.dict
+                    except: pass # bug fix
                     del sprite # this removes the sprite instance itself
                     continue
                 if hasattr(sprite, 'blit'):
