@@ -2,12 +2,15 @@
 
 ### COMP 4555 Games Development Final Project FALL 2022
 
+[Youtube Video Link](https://www.youtube.com/watch?v=2WbkAGH2vlg)
+
 ## Details
 - **Title:** The Cursed Forest
 - **Pitch:** Do you have what it takes to escape the cursed forest?
 - **Genre:** 2D platformer / shooter
 - **Audience:** Gamers seeking a challenge
 - **Engine:** Pygame
+- **Run the game:** launch the run.py file with python
 - **Creator:** Miroslav Nikolov
 
 ## Description:
