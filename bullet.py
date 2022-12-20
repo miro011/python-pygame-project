@@ -29,7 +29,7 @@ class Bullet():
     # OPTIONAL
 
     def update_location(self):
-        progress = self.counter / self.numUpdates
+        progress = self.counter / self.numUpdates if self.numUpdates > 0 else 1
         self.rect.center = self.startV.lerp(self.finalV, progress)
         self.counter += 1
 
