@@ -2,8 +2,8 @@
 
 ### COMP 4555 Games Development Final Project FALL 2022
 
-![menu image](repo-stuff/images/menu.png?raw=true "Title")
-![gameplay image](repo-stuff/images/play.png?raw=true "Title")
+![menu image](repo-stuff/images/menu.png?raw=true "menu")
+![gameplay image](repo-stuff/images/play.png?raw=true "gameplay")
 
 ## Details
 - **Title:** The Cursed Forest
