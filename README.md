@@ -2,6 +2,9 @@
 
 ### COMP 4555 Games Development Final Project FALL 2022
 
+![menu image](repo-stuff/images/menu.png?raw=true "Title")
+![gameplay image](repo-stuff/images/play.png?raw=true "Title")
+
 ## Details
 - **Title:** The Cursed Forest
 - **Pitch:** Do you have what it takes to escape the cursed forest?
