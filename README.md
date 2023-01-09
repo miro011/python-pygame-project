@@ -2,8 +2,6 @@
 
 ### COMP 4555 Games Development Final Project FALL 2022
 
-[Youtube Video Link](https://www.youtube.com/watch?v=2WbkAGH2vlg)
-
 ## Details
 - **Title:** The Cursed Forest
 - **Pitch:** Do you have what it takes to escape the cursed forest?
