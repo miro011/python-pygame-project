@@ -48,6 +48,5 @@
 - Even though there are plenty of games where you need to dodge and shoot at the same time, I doubt there is one with a drone over the character's head and the combination of mechanics I use.
 
 ## Credits
-- [Ryan Kazmerik](https://ca.linkedin.com/in/ryan-kazmerik-22049326) for the wonderful semester
 - Image search, gif extraction tools, GIMP and Shotcut Video Editor for allowing me too acquire/create/edit visuals and sounds
 - Pygame for taking away some of the hassles with games development
