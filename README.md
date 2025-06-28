@@ -1,8 +1,5 @@
 # The Cursed Forest
 
-### COMP 4555 Games Development Final Project FALL 2022
-
-![menu image](repo-stuff/images/menu.png?raw=true "menu")
 ![gameplay image](repo-stuff/images/play.png?raw=true "gameplay")
 
 ## Details
